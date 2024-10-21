@@ -145,8 +145,8 @@ class LoRA_SAM2(nn.Module):
             nn.init.zeros_(w_B.weight)
 
 
-    def forward(self, image, using_sigmoid=True, return_img_embedding=False, upscale=True):
-        self.predictor.set_image_batch(image) # normalized regularly? Need to remove this
+    def forward(self, image, using_sigmoid=True, upscale=True):
+        self.predictor.set_image_batch(image)
         sparse_embeddings, dense_embeddings = self.predictor.model.sam_prompt_encoder(points=None,boxes=None,masks=None)
         high_res_features = [feat_level for feat_level in self.predictor._features["high_res_feats"]]
         # print(self.predictor._features["image_embed"].shape)
@@ -156,24 +156,16 @@ class LoRA_SAM2(nn.Module):
             sparse_prompt_embeddings=sparse_embeddings,
             dense_prompt_embeddings=dense_embeddings,
             multimask_output=True,
-            repeat_image=True, # !! ??
+            repeat_image=True,
             high_res_features=high_res_features,
             using_sigmoid=using_sigmoid
         )
         # print(low_res_masks.shape)
 
-        # ! resolve orig_hw thing
         if upscale:
             prd_masks = self.predictor._transforms.postprocess_masks(low_res_masks, self.predictor._orig_hw[-1])
-
-        if return_img_embedding:
-            return low_res_masks, prd_masks, prd_scores, self.predictor._features["image_embed"]
         
-        if upscale:
-            return low_res_masks, prd_masks, prd_scores
-        else:
-            return low_res_masks, prd_scores
-      
+        return low_res_masks, prd_masks, prd_scores
 
 
 class _LoRA_qkv(nn.Module):
