@@ -27,8 +27,7 @@ class LoRA_SAM2(nn.Module):
         self.w_As = []  # These are linear layers
         self.w_Bs = []
 
-        st = "Total number of parameters sam2 before lora:"
-        print(st, sum(p.numel() for p in predictor.model.parameters() if p.requires_grad))
+        # print("Total number of parameters sam2 BEFORE lora:", sum(p.numel() for p in predictor.model.parameters() if p.requires_grad))
 
         # lets freeze first
         for param in self.predictor.model.image_encoder.parameters():
@@ -58,6 +57,8 @@ class LoRA_SAM2(nn.Module):
                 w_b_linear_v,
             )
         self.reset_parameters()
+        # print("Total number of parameters sam2 AFTER lora:", sum(p.numel() for p in predictor.model.parameters() if p.requires_grad))
+
 
     def save_lora_parameters(self, filename: str) -> None:
         # scheduler, optimizer, epoch
