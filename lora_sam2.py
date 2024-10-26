@@ -146,7 +146,7 @@ class LoRA_SAM2(nn.Module):
             nn.init.zeros_(w_B.weight)
 
 
-    def forward(self, image, upscale=True):
+    def forward(self, image):
         self.predictor.set_image_batch(image)
         sparse_embeddings, dense_embeddings = self.predictor.model.sam_prompt_encoder(points=None,boxes=None,masks=None)
         high_res_features = [feat_level for feat_level in self.predictor._features["high_res_feats"]]
