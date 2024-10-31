@@ -1,6 +1,6 @@
 Simple implementation of low-rank adaptation of large language models (LoRA) for [Segment Anything 2](https://github.com/facebookresearch/sam2). LoRA is only applied to image encoder attention blocks, similar to [this repository](https://github.com/JamesQFreeman/Sam_LoRA). 
 
-You should be able to use this implementation out of the box with SAM 2. However, the code is in development, so please report any issues!
+The code assumes standard preprocessing for SAM (e.g. normalization) has already been performed and uses no prompts by default, but can be customized easily. This repository is still in development so please report any issues!
 
 ### Important Information (please read):
 
